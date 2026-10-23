@@ -1,0 +1,22 @@
+# Deployment blueprint. Creating the service requires a Render account.
+# The persistent disk requires a paid plan; review the price before confirming.
+services:
+  - type: web
+    name: vigimarket
+    runtime: python
+    plan: starter
+    buildCommand: python --version
+    startCommand: python server.py
+    healthCheckPath: /api/me
+    autoDeployTrigger: commit
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.14
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: DATA_DIR
+        value: /var/data/vigimarket
+    disk:
+      name: vigimarket-data
+      mountPath: /var/data
+      sizeGB: 1

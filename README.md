@@ -23,3 +23,7 @@ Las pruebas arrancan un servidor y una base de datos temporales, comprueban aute
 Repositorio: `perseo1346-rgb/Proyecto-clc`. Diseño y contenido: `static/index.html` y `static/style.css`; interacciones: `static/app.js`; cuentas y publicaciones: `server.py`. Las cuentas y anuncios requieren un servidor Python con almacenamiento persistente; GitHub Pages no ejecuta este backend.
 
 Para alojarlo, inicia `python server.py` desde la raíz del proyecto, configura `PORT` según el proveedor y `DATA_DIR` con la ruta de un disco persistente. Activa HTTPS y `COOKIE_SECURE=1`. El repositorio conserva el código; la base de datos requiere respaldos independientes.
+
+## Despliegue preparado en Render
+
+El archivo `render.yaml` describe un servicio Python con HTTPS del proveedor y un disco persistente de 1 GB para SQLite. Importa este repositorio como Blueprint en Render. Requiere vincular una cuenta de Render con acceso al repositorio. El plan Starter y el disco tienen coste: revisa el precio mostrado por Render antes de confirmar. El archivo por sí solo no crea ni publica ningún servicio. Los cambios posteriores a `main` pueden desplegarse automáticamente con esta configuración. La dirección pública solo existe después de que Render confirme un despliegue correcto.
