@@ -1,29 +1,62 @@
 # VigiMarket
-Marketplace responsive para el sector de seguridad privada en Perú. Frontend sin compilación y backend Python 3.12 con SQLite; no requiere paquetes externos.
+
+Marketplace responsive de seguridad privada en Perú: búsqueda y filtros, categorías, detalles, registro, sesiones, publicaciones con imagen, perfil y WhatsApp opcional. Las seis publicaciones ilustrativas están identificadas y no tienen contactos ficticios.
 
 ## Ejecutar
+
+Requiere Python 3.12 o posterior. No necesita instalar paquetes ni compilar el frontend.
+
 ```sh
-cd /workspace/Proyecto-clc
 python server.py
 ```
-Puerto predeterminado: 3000; se puede cambiar con `PORT`. SQLite se crea en `data/vigimarket.db` (ignorado por Git). Conserva este archivo para mantener cuentas y anuncios. Las contraseñas usan scrypt, y las sesiones de 30 días se guardan en el servidor con cookies HttpOnly y SameSite=Lax. No se almacenan contraseñas en el navegador.
 
-En producción, colocar detrás de HTTPS y establecer `COOKIE_SECURE=1`. Antes de abrir un servicio público, añadir límites de solicitudes/intentos de acceso, copias de seguridad, recuperación de contraseña por correo y políticas de privacidad y moderación. El servidor integrado está destinado al desarrollo y a la validación funcional.
+El puerto predeterminado es 3000. Configuración opcional:
 
-Las publicaciones ilustrativas están identificadas; no admiten contacto. Las publicaciones reales se guardan en SQLite, con imágenes de hasta 1 MB y WhatsApp opcional. Las fotografías ilustrativas usan Unsplash y las fuentes Google Fonts; el contenido y las fuentes de sistema siguen disponibles si estos servicios no responden. No hay pagos, valoraciones ni verificaciones inventadas. El canal de soporte no está configurado.
+| Variable | Uso |
+| --- | --- |
+| `PORT` | Puerto asignado por el alojamiento. |
+| `DATA_DIR` | Directorio persistente de SQLite; predeterminado `data/`. |
+| `COOKIE_SECURE` | Usar `1` cuando el servicio se publique con HTTPS. |
 
-## Verificación
+La base `vigimarket.db` conserva usuarios, sesiones y publicaciones. No forma parte de Git. Las contraseñas usan scrypt; las cookies de sesión son HttpOnly y SameSite=Lax. No se guardan contraseñas en el navegador. Las sesiones duran 30 días. El servidor limita intentos de acceso, valida el origen y los cuerpos JSON y admite imágenes JPG, PNG y WebP de hasta 1 MiB. Los límites de intentos son locales a cada proceso.
+
+## Pruebas
+
 ```sh
 python -m unittest discover -s tests -v
+node --check static/app.js
 ```
-Las pruebas arrancan un servidor y una base de datos temporales, comprueban autenticación, cookies, publicación, persistencia y rechazo de operaciones no autorizadas.
 
-## Continuar modificando el proyecto
+Las pruebas usan bases temporales y verifican autenticación, publicaciones, persistencia tras reinicio, almacenamiento configurable y rechazo de solicitudes inválidas. Se comprobó también el flujo completo en Chromium: registro → publicación → perfil tras recarga → contacto → cierre de sesión, búsqueda y ausencia de desbordamiento a 360, 390, 768 y 1440 píxeles.
 
-Repositorio: `perseo1346-rgb/Proyecto-clc`. Diseño y contenido: `static/index.html` y `static/style.css`; interacciones: `static/app.js`; cuentas y publicaciones: `server.py`. Las cuentas y anuncios requieren un servidor Python con almacenamiento persistente; GitHub Pages no ejecuta este backend.
+## Publicación
 
-Para alojarlo, inicia `python server.py` desde la raíz del proyecto, configura `PORT` según el proveedor y `DATA_DIR` con la ruta de un disco persistente. Activa HTTPS y `COOKIE_SECURE=1`. El repositorio conserva el código; la base de datos requiere respaldos independientes.
+`render.yaml` prepara un servicio Python con HTTPS de Render y un disco persistente de 1 GB. El plan Starter y el disco tienen coste; Render muestra el precio antes de confirmar. Importa `perseo1346-rgb/Proyecto-clc` como Blueprint desde tu cuenta de Render. El archivo no crea por sí solo un servicio. Los cambios en `main` pueden desplegarse automáticamente tras vincular el repositorio.
 
-## Despliegue preparado en Render
+Este servicio conserva el frontend y la API en el mismo dominio. Un alojamiento estático como GitHub Pages no ejecuta cuentas ni publicaciones. La URL pública solo existe cuando el alojamiento confirma un despliegue correcto. Aún no se ha confirmado un despliegue público.
 
-El archivo `render.yaml` describe un servicio Python con HTTPS del proveedor y un disco persistente de 1 GB para SQLite. Importa este repositorio como Blueprint en Render. Requiere vincular una cuenta de Render con acceso al repositorio. El plan Starter y el disco tienen coste: revisa el precio mostrado por Render antes de confirmar. El archivo por sí solo no crea ni publica ningún servicio. Los cambios posteriores a `main` pueden desplegarse automáticamente con esta configuración. La dirección pública solo existe después de que Render confirme un despliegue correcto.
+Para automatizar el despliegue desde el entorno de Codex, hace falta una credencial `RENDER_API_KEY` vinculada de forma segura a `api.render.com` y acceso de red a esa API. No pegues credenciales en archivos, commits ni en el chat. El borrador del entorno ya declara el requisito. Guardar un borrador no publica la aplicación.
+
+## Respaldo de información
+
+```sh
+python scripts/backup_database.py
+# O indica otro directorio de destino:
+python scripts/backup_database.py --destination /ruta/de/respaldos
+```
+
+El comando usa la API de respaldo de SQLite y verifica la integridad del resultado. El destino predeterminado es `DATA_DIR/backups`; conserva también copias fuera del servidor. Para restaurar, detén el servicio, conserva la base actual y copia el respaldo verificado como `DATA_DIR/vigimarket.db` antes de reiniciar. Nunca publiques estas bases: contienen datos privados.
+
+## Continuar modificando
+
+- Diseño y contenido: `static/index.html`, `static/style.css`.
+- Interacciones: `static/app.js`.
+- API, cuentas y publicaciones: `server.py`.
+- Despliegue: `render.yaml`.
+- Instrucciones para futuras tareas: `AGENTS.md`.
+
+El código se mantiene en `perseo1346-rgb/Proyecto-clc`, rama `main`. La base de datos necesita respaldo independiente. No hay pagos ni mensajería interna, y no se simulan verificaciones oficiales. No se ha integrado un proveedor de correo para recuperación de contraseña ni se ha proporcionado un canal comercial de soporte.
+
+## Recursos visuales
+
+Las imágenes ilustrativas de `static/assets/marketplace-examples.png` se generaron para el proyecto y se sirven localmente. No representan proveedores reales. Las fuentes Inter y Poppins se alojan en `static/fonts`, con sus licencias SIL OFL incluidas; sus paquetes Fontsource 5.3.0 se verificaron contra la integridad SHA-512 publicada por npm. El diseño principal funciona sin cargar fuentes ni imágenes externas.

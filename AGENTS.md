@@ -12,3 +12,7 @@ This repository contains the VigiMarket marketplace for private security in Peru
 - Do not simulate successful registrations, publications or contacts.
 - Public deployment needs HTTPS and persistent storage. A static host alone does not provide account or publication functionality.
 - The source is intended to be retained in `perseo1346-rgb/Proyecto-clc` for continued modifications.
+
+- All example images and fonts are local in `static/assets/` and `static/fonts/`; keep font licenses.
+- Use `python scripts/backup_database.py` for a consistent SQLite backup before data migrations. Keep off-host backups as well.
+- Publishing requires an actual hosting account. `render.yaml` is a blueprint, not proof of a live deployment. Verify the assigned public URL before reporting publication.
