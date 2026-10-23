@@ -60,3 +60,15 @@ El código se mantiene en `perseo1346-rgb/Proyecto-clc`, rama `main`. La base de
 ## Recursos visuales
 
 Las imágenes ilustrativas de `static/assets/marketplace-examples.png` se generaron para el proyecto y se sirven localmente. No representan proveedores reales. Las fuentes Inter y Poppins se alojan en `static/fonts`, con sus licencias SIL OFL incluidas; sus paquetes Fontsource 5.3.0 se verificaron contra la integridad SHA-512 publicada por npm. El diseño principal funciona sin cargar fuentes ni imágenes externas.
+
+## Vista previa pública
+
+GitHub Pages sirve una vista previa navegable del diseño en https://perseo1346-rgb.github.io/Proyecto-clc/. La rama `gh-pages` contiene únicamente archivos estáticos. Esta vista está identificada explícitamente: permite explorar y filtrar ejemplos, pero no solicita contraseñas ni simula registros o publicaciones. La aplicación completa y su API siguen en `main`; requieren el alojamiento Python descrito arriba.
+
+Para actualizar la vista previa después de modificar y guardar el código en Git:
+
+```sh
+python scripts/publish_preview.py
+```
+
+El script genera una copia en un directorio temporal y actualiza `gh-pages`, sin cambiar el checkout de trabajo ni incluir la base de datos. GitHub Pages despliega automáticamente esa rama. Comprueba el resultado del workflow `pages build and deployment` antes de confirmar que los cambios son públicos.

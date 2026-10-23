@@ -16,3 +16,5 @@ This repository contains the VigiMarket marketplace for private security in Peru
 - All example images and fonts are local in `static/assets/` and `static/fonts/`; keep font licenses.
 - Use `python scripts/backup_database.py` for a consistent SQLite backup before data migrations. Keep off-host backups as well.
 - Publishing requires an actual hosting account. `render.yaml` is a blueprint, not proof of a live deployment. Verify the assigned public URL before reporting publication.
+- Public design preview: https://perseo1346-rgb.github.io/Proyecto-clc/ (GitHub Pages, branch `gh-pages`). It is intentionally read-only and does not provide accounts/publications.
+- After committing relevant frontend changes, update that preview with `python scripts/publish_preview.py`; verify the Pages deployment succeeds. Keep preview limitations visible.
